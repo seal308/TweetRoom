@@ -1,12 +1,15 @@
 public class main
 {
-
+	//Run jar just do: java -jar <jar-file-name>.jar
+	
 	public static void main (String[] args)
 	{
 		System.out.println("Hi there");
 		
 		Tweeter twitterO = new Tweeter();
 		twitterO.sendTweet();
+		
+		DiscordConnect dConnect = new DiscordConnect();
 		
 		/*
 		try {
