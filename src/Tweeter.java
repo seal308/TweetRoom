@@ -64,7 +64,9 @@ public class Tweeter {
 			fw = new FileWriter(roomsInfoFile, true);
 			BufferedWriter bw = null;
 			bw = new BufferedWriter(fw);
-			bw.write("123456");
+			//BELOW LINE WORKS AND WRITES TO FILE
+			//bw.write("123456");
+			
 			//fw.close();
 			bw.close();
 		} catch (IOException e1) {
@@ -129,7 +131,7 @@ public class Tweeter {
 	}
 	
 	public void testPostingToTwitter() throws TwitterException{
-		String message="Fhttp://imgur.com/oFDj1cn Room Link: [PUT ROOM LINK HERE] <@&288431932335718403> <@&319561543530446848>";
+		String message="Ihttp://imgur.com/oFDj1cn Room Link: [PUT ROOM LINK HERE] <@&288431932335718403> <@&319561543530446848>";
 		Status status = twitter2.updateStatus(message);
 	}
 	

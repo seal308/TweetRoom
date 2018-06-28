@@ -2,21 +2,47 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.util.event.ListenerManager;
 import org.javacord.api.util.logging.ExceptionLogger;
 
 public class DiscordConnect {
 	public DiscordConnect()
 	{
 		String token = getToken();
+		RoomWizard rWizard = new RoomWizard();
+		AtomicReference<ListenerManager> lm = new AtomicReference<>();
 
         new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
+        	
+        	//api.addMessageCreateListener(rWizard);
             
             // Add a listener which answers with "Pong!" if someone writes "!ping"
             api.addMessageCreateListener(event -> {
                 if (event.getMessage().getContent().equalsIgnoreCase("++ping")) {
                     event.getChannel().sendMessage("Pong!");
+                }
+                if (event.getMessage().getContent().equalsIgnoreCase("++room")) {
+                	
+                	/*
+                	if (event.getMessage().getChannel().getIdAsString()=="461813132088836096")
+                	{
+                		
+                	}
+                	*/
+                	
+                    //event.getChannel().sendMessage("ROOM!");
+                    //RoomWizard rWizard = new RoomWizard();
+                    //api.addMessageCreateListener(rWizard);
+                	event.getMessage().getUserAuthor().ifPresent(user -> {
+                        //user.addMessageCreateListener(rWizard);
+                        lm.set(user.addMessageCreateListener(rWizard));
+                        //rWizard.turnOn(event.getMessage());
+                        rWizard.turnOn(event.getMessage(),lm);
+                    });
+                    //rWizard.turnOn(event.getMessage());
                 }
             });
             
@@ -24,6 +50,9 @@ public class DiscordConnect {
             System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
             
         }).exceptionally(ExceptionLogger.get());
+        
+        //RoomWizard rWizard = new RoomWizard();
+     
 	}
 	
 	public String getToken()

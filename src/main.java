@@ -7,7 +7,7 @@ public class main
 		System.out.println("Hi there");
 		
 		Tweeter twitterO = new Tweeter();
-		twitterO.sendTweet();
+		//twitterO.sendTweet();
 		
 		DiscordConnect dConnect = new DiscordConnect();
 		
@@ -19,7 +19,6 @@ public class main
 			e.printStackTrace();
 		}
 		*/
-		
 		
 	}
 	
