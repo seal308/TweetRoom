@@ -29,6 +29,7 @@ public class RoomWizard extends Wizard implements MessageCreateListener {
 		runWizard(event.getMessage());
 	}
 	
+	//Might want to make below method it's own class, RoomWizardIO
 	public void readRooms()
 	{
 		//InputStream in = getClass().getResourceAsStream("C:\\Users\\Glenn\\Desktop\\RoomsInfo.txt");
@@ -67,29 +68,17 @@ public class RoomWizard extends Wizard implements MessageCreateListener {
 		Collections.sort(hostProviders, String.CASE_INSENSITIVE_ORDER);
 	}
 	
-	public void sortHostProviders(ArrayList<String> hProviders)
-	{
-		Collections.sort(hProviders, new Comparator<String>()
-		{
-
-			@Override
-			public int compare(String s1, String s2) {
-				return s1.compareToIgnoreCase(s2);
-			}
-			
-		});
-	}
 
 	@Override
 	public void validResponse(Message messageWiz) {
 		// TODO Auto-generated method stub
-		messageWiz.getChannel().sendMessage("Valid Room");
+		messageWiz.getChannel().sendMessage("Valid Room\nPlease check #simulcast_updates\nIf the announcement isn't there type ++room again");
 	}
 
 	@Override
 	public void invalidResponse(Message messageWiz) {
 		// TODO Auto-generated method stub
-		messageWiz.getChannel().sendMessage("Invalid Channel, try again or type exit to leave wizard");
+		messageWiz.getChannel().sendMessage("Invalid Room #, try again or type exit to leave wizard");
 		
 	}
 
@@ -99,6 +88,9 @@ public class RoomWizard extends Wizard implements MessageCreateListener {
 		// send tweet
 		System.out.println("valid index:" + index);
 		System.out.println("validOp, " + "ALval: " + hostProviders.get(index-1));
+		String hpName = hostProviders.get(index-1);
+		Tweeter tweetO = new Tweeter();
+		tweetO.sendTweet(roomDict.get(hpName));
 	}
 
 	@Override

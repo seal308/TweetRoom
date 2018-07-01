@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,10 +17,11 @@ public abstract class Wizard implements MessageCreateListener {
 	private Boolean on = false;
 	private User wizUser;
 	private Set<String> inWizardIDs = new HashSet<String>();
+	HashMap<String, AtomicReference<ListenerManager>> lmDict = new HashMap<>();
 
 	private String wizardInput = "";
 	
-	AtomicReference<ListenerManager> lm;
+	//AtomicReference<ListenerManager> lm;
 
 	public abstract void validResponse(Message messageWiz);
 
@@ -93,7 +95,8 @@ public abstract class Wizard implements MessageCreateListener {
 	}
 
 	public void turnOn(Message msgWiz, AtomicReference<ListenerManager> lmanager) {
-		lm = lmanager;
+		//lm = lmanager;
+		AtomicReference<ListenerManager> lm = lmanager;
 		
 		displayOptions(msgWiz);
 		on = true;
@@ -105,19 +108,31 @@ public abstract class Wizard implements MessageCreateListener {
 			wizUser = msgWiz.getUserAuthor().get();
 			//inWizardIDs.add(wizUser.getId());
 			inWizardIDs.add(wizUser.getIdAsString());
+			lmDict.put(wizUser.getIdAsString(), lm);
 		}
 	}
-
+	
+	// turn off might need to call roomWizard method to clear the HP AL.
 	public void turnOff(String userRemoveID) {
 
 		inWizardIDs.remove(userRemoveID);
-
+		AtomicReference<ListenerManager> lm = lmDict.get(userRemoveID);
+		if (lm==null)
+		{
+			System.out.println("LM IS NULL");;
+		}
+		lm.get().remove();
+		lmDict.remove(userRemoveID);
+		if (lmDict.isEmpty())
+		{
+			System.out.println("lmDict IS NULL");;
+		}
 		if (inWizardIDs.isEmpty())
 		{
 			on = false;
 		}
 		
-		lm.get().remove();
+		//lm.get().remove();
 
 	}
 

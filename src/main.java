@@ -6,7 +6,7 @@ public class main
 	{
 		System.out.println("Hi there");
 		
-		Tweeter twitterO = new Tweeter();
+		//Tweeter twitterO = new Tweeter();
 		//twitterO.sendTweet();
 		
 		DiscordConnect dConnect = new DiscordConnect();

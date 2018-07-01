@@ -26,6 +26,9 @@ public class DiscordConnect {
                 }
                 if (event.getMessage().getContent().equalsIgnoreCase("++room")) {
                 	
+                	
+                	//MUST DO CHANNEL THING
+                	
                 	/*
                 	if (event.getMessage().getChannel().getIdAsString()=="461813132088836096")
                 	{
