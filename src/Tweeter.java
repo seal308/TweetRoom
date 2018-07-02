@@ -35,8 +35,9 @@ public class Tweeter {
 		  .setOAuthConsumerSecret(twitterInfo[CS_INDEX])
 		  .setOAuthAccessToken(twitterInfo[ATOKEN_INDEX])
 		  .setOAuthAccessTokenSecret(twitterInfo[ATOKENS_INDEX]);
+		
 		TwitterFactory tf = new TwitterFactory(cb.build());
-		 twitter2 = tf.getInstance();
+		twitter2 = tf.getInstance();
 	}
 	
 	public String[] getTwitterInfo()
@@ -46,53 +47,28 @@ public class Tweeter {
 		InputStream in = getClass().getResourceAsStream("/TwitterInfo.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		
-		// WRITE TO ROOM FILE, PATH RELEVENT TO MACHINE
-		
-		File roomsInfoFile = new File("C:\\Users\\Glenn\\Desktop\\RoomsInfo.txt");
-		FileWriter fw;
-		try {
-			fw = new FileWriter(roomsInfoFile, true);
-			BufferedWriter bw = null;
-			bw = new BufferedWriter(fw);
-			//BELOW LINE WORKS AND WRITES TO FILE
-			//bw.write("123456");
-			
-			//fw.close();
-			bw.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		String line;
 		try {
 			line = reader.readLine();
 			int counter = 0;
 			while (line != null)
 			{
-				System.out.println(line);
-				
 				switch (counter)
 				{
 					// could do a test to see if cKey etc matches up
 					case CK_INDEX:
 						infoArray[CK_INDEX] = line;
-						//System.out.println("cKey is: " + infoArray[CK_INDEX]);
 						break;
 					case CS_INDEX:
 						infoArray[CS_INDEX] = line;
-						//System.out.println("cSecret is: " + infoArray[CS_INDEX]);
 						break;
 					case ATOKEN_INDEX:
 						infoArray[ATOKEN_INDEX] = line;
-						//System.out.println("aToken is: " + infoArray[ATOKEN_INDEX]);
 						break;
 					case ATOKENS_INDEX:
 						infoArray[ATOKENS_INDEX] = line;
-						//System.out.println("aTokentSecret is " + infoArray[ATOKENS_INDEX]);
 						break;
 				}
-				
 				
 				line = reader.readLine();
 				counter++;
@@ -123,9 +99,6 @@ public class Tweeter {
 	}
 	
 	public void postToTwitter(String tweet) throws TwitterException{
-		//String message="Ihttp://imgur.com/oFDj1cn Room Link: [PUT ROOM LINK HERE] <@&288431932335718403> <@&319561543530446848>";
-		//String message=tweet;
-		//Status status = twitter2.updateStatus(message);
 		Status status = twitter2.updateStatus(tweet);
 	}
 	

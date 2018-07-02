@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,11 +18,10 @@ public abstract class Wizard implements MessageCreateListener {
 	private Boolean on = false;
 	private User wizUser;
 	private Set<String> inWizardIDs = new HashSet<String>();
-	HashMap<String, AtomicReference<ListenerManager>> lmDict = new HashMap<>();
+	HashMap<String, ListenerManager> lmDict = new HashMap<>();
 
 	private String wizardInput = "";
 	
-	//AtomicReference<ListenerManager> lm;
 
 	public abstract void validResponse(Message messageWiz);
 
@@ -33,13 +33,6 @@ public abstract class Wizard implements MessageCreateListener {
 
 	public abstract int getRange();
 	
-	/*
-	@Override
-	public void onMessageCreate(DiscordAPI api, Message messageWiz) {
-
-		runWizard(messageWiz);
-	}
-	*/
 	@Override
 	public void onMessageCreate(MessageCreateEvent event) {
 		Message messageWiz = event.getMessage();
@@ -47,18 +40,13 @@ public abstract class Wizard implements MessageCreateListener {
 	}
 
 	public void runWizard(Message messageWiz) {
-		System.out.println("IN RUN_WIZARD");
-		System.out.println("ON: " + on);
-		//if (on == true && inWizardIDs.contains(messageWiz.getAuthor().getId()))
 		if (on == true && inWizardIDs.contains(messageWiz.getAuthor().getIdAsString()));
 		{
-			System.out.println("IDsContainsIF");
 			wizardInput = messageWiz.getContent();
 			int index = -1;
 
 			if (wizardInput.equals("exit"))
 			{
-				//turnOff(messageWiz.getAuthor().getId());
 				turnOff(messageWiz.getAuthor().getIdAsString());
 			} else
 			{
@@ -78,11 +66,9 @@ public abstract class Wizard implements MessageCreateListener {
 	public void inRange(int index, int range, Message messageWiz) {
 		if (index > 0 && index <= range)
 		{
-			System.out.println("inRange_valid");
 			validSelection(messageWiz, index);
 		} else
 		{
-			System.out.println("inRange_INvalid");
 			invalidResponse(messageWiz);
 		}
 	}
@@ -90,50 +76,28 @@ public abstract class Wizard implements MessageCreateListener {
 	public void validSelection(Message msgWiz, int index) {
 		validResponse(msgWiz);
 		validOperation(msgWiz, index);
-		//turnOff(msgWiz.getAuthor().getId());
 		turnOff(msgWiz.getAuthor().getIdAsString());
 	}
 
-	public void turnOn(Message msgWiz, AtomicReference<ListenerManager> lmanager) {
-		//lm = lmanager;
-		AtomicReference<ListenerManager> lm = lmanager;
-		
+	public void turnOn(Message msgWiz, ListenerManager lm) {
+
 		displayOptions(msgWiz);
 		on = true;
-		//wizUser = msgWiz.getAuthor();
-		// check if has value
+		
 		if (msgWiz.getUserAuthor().isPresent())
 		{
-			// below throws a NoSuchElementException if value not there
 			wizUser = msgWiz.getUserAuthor().get();
-			//inWizardIDs.add(wizUser.getId());
 			inWizardIDs.add(wizUser.getIdAsString());
 			lmDict.put(wizUser.getIdAsString(), lm);
 		}
 	}
 	
-	// turn off might need to call roomWizard method to clear the HP AL.
 	public void turnOff(String userRemoveID) {
 
 		inWizardIDs.remove(userRemoveID);
-		AtomicReference<ListenerManager> lm = lmDict.get(userRemoveID);
-		if (lm==null)
-		{
-			System.out.println("LM IS NULL");;
-		}
-		lm.get().remove();
+		ListenerManager lm = lmDict.get(userRemoveID);
+		lm.remove();
 		lmDict.remove(userRemoveID);
-		if (lmDict.isEmpty())
-		{
-			System.out.println("lmDict IS NULL");;
-		}
-		if (inWizardIDs.isEmpty())
-		{
-			on = false;
-		}
-		
-		//lm.get().remove();
-
 	}
 
 }
